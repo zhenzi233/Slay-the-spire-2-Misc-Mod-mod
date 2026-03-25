@@ -1,0 +1,37 @@
+{
+  "TEST.mod_title": "Example mod configuration",
+
+  "TEST-FIRST_SECTION.title": "蛆！？遗物配置",
+  "TEST-SECOND_SECTION.title": "Nothing here does anything at all",
+
+  "TEST-ENABLE_WRIGGLER_RELIC.title": "启用遗物",
+  "TEST-ENABLE_WRIGGLER_RELIC.hover.title": "遗物开关",
+  "TEST-ENABLE_WRIGGLER_RELIC.hover.desc": "开局是否携带一个蛆？！遗物",
+
+  "TEST-WRIGGLER_HP.title": "怪物生命值",
+  "TEST-WRIGGLER_HP.hover.title": "基础生命",
+  "TEST-WRIGGLER_HP.hover.desc": "设置怪物的基础生命值（范围：1-100）。",
+
+  "TEST-WRIGGLER_HP_WAVE.title": "怪物生命值波动",
+  "TEST-WRIGGLER_HP_WAVE.hover.title": "波动范围",
+  "TEST-WRIGGLER_HP_WAVE.hover.desc": "影响怪物生命的随机值（为0时始终为基础生命）（范围：0-25）。",
+
+
+  "TEST-ENABLE_DEBUG_LOGGING.title": "Enable debug logging",
+  "TEST-ENABLE_DEBUG_LOGGING.hover.title": "Explicit hover title",
+  "TEST-ENABLE_DEBUG_LOGGING.hover.desc": "Pretend setting to enable debug logging",
+
+  "TEST-ALLOW_DUPLICATE_RELICS.title": "Allow duplicate relics",
+  "TEST-ALLOW_DUPLICATE_RELICS.hover.desc": "Pretend setting to allow duplicate relics",
+
+  "TEST-CREATED_CARD_KEYWORD.title": "Created card keyword",
+  "TEST-CREATED_CARD_KEYWORD.hover.desc": "Supposedly adds this keyword to cards created in combat (but doesn't actually)",
+
+  "TEST-ENEMY_DAMAGE_MULTIPLIER.title": "Enemy damage multiplier",
+  "TEST-ENEMY_DAMAGE_MULTIPLIER.hover.title": "",
+  "TEST-ENEMY_DAMAGE_MULTIPLIER.hover.desc": "More damage equals more fun...?",
+
+  "TEST-STARTING_HEALTH_OFFSET.title": "Starting health offset",
+  "TEST-STARTING_ACT.title": "Starting act",
+  "TEST-MINIMUM_ELITES_PER_ACT.title": "Minimum elites per act"
+}

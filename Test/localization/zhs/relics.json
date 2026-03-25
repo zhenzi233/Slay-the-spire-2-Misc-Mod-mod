@@ -1,0 +1,11 @@
+{
+  "TEST_RELIC.title": "测试遗物",
+  "TEST_RELIC.description": "每回合开始时，抽[blue]1[/blue]张牌。",
+  "TEST_RELIC.flavor": "觉得很眼熟？",
+  "TEST-ALL_ARMIES_HEED.description": "战斗开始时，若你的生命值低于5。一张自刎归天放入你手牌里。",
+  "TEST-ALL_ARMIES_HEED.flavor": "三军听令，自刎归天！",
+  "TEST-ALL_ARMIES_HEED.title": "战至最后一刻",
+  "TEST-MAGGOT.description": "受到致命伤害后，防止死亡，并变身成区。清除你的牌，并获得20张专属牌。",
+  "TEST-MAGGOT.flavor": "好多区。。。。。。",
+  "TEST-MAGGOT.title": "蛆！？"
+}
