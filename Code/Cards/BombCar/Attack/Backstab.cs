@@ -1,6 +1,7 @@
 using BaseLib.Abstracts;
 using BaseLib.Extensions;
 using BaseLib.Utils;
+using HarmonyLib;
 using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -15,43 +16,41 @@ using MegaCrit.Sts2.Core.ValueProps;
 using Test.Code.Extensions;
 
 namespace Test.Code.Cards.BombCar.Attack;
-// 狂乱
-// 对所有敌人造成已损失生命*自身力量层数的伤害
-// 选择1名队友，对其造成3点伤害。使自身获得5点力量，抽2张牌
+// 背刺
+// 选择1名敌人，对其造成9点伤害，获得9点护盾
+// 获得X点力量，造成你已损失生命*X能量的伤害
 
 
 [Pool(typeof(ColorlessCardPool))]
-public sealed class Chaos() : CustomCardModel(2, CardType.Attack, CardRarity.Common, TargetType.AllEnemies)
+public sealed class Backstab() : CustomCardModel(2, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
 {
     protected override IEnumerable<IHoverTip> ExtraHoverTips => [
-        HoverTipFactory.FromPower<StrengthPower>()
+        HoverTipFactory.Static(StaticHoverTip.Block)
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
+        new DamageVar(9, ValueProp.Move),
+        new BlockVar(9, ValueProp.Move)
     ];
 
     public override string PortraitPath => $"{Id.Entry.RemovePrefix().ToLowerInvariant()}.png".CardImagePath();
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        var damageValue = (Owner.Creature.MaxHp - Owner.Creature.CurrentHp) * Owner.Creature.GetPowerAmount<StrengthPower>();
-        var allEnemies = CombatState.Enemies;
-        if (damageValue < 0 && allEnemies != null)
-        {
-            foreach (var enemy in allEnemies)
-            {
-                await CreatureCmd.Heal(enemy, damageValue);
-            }
-        }
-        await DamageCmd.Attack(damageValue).FromCard(this).TargetingAllOpponents(base.CombatState)
+        ArgumentNullException.ThrowIfNull(cardPlay.Target);
+
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_starry_impact")
             .SpawningHitVfxOnEachCreature()
             .Execute(choiceContext);
+
+        await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, cardPlay);
     }
 
     protected override void OnUpgrade()
     {
-        EnergyCost.UpgradeBy(-1);
+        DynamicVars.Damage.UpgradeValueBy(9m);
+        DynamicVars.Block.UpgradeValueBy(9m);
     }
 }

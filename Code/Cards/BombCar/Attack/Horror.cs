@@ -15,13 +15,13 @@ using MegaCrit.Sts2.Core.ValueProps;
 using Test.Code.Extensions;
 
 namespace Test.Code.Cards.BombCar.Attack;
-// 狂乱
-// 对所有敌人造成已损失生命*自身力量层数的伤害
+// 恐怖
+// 消耗4x生命，对所有敌人造成14X点伤害与14X层灾厄
 // 选择1名队友，对其造成3点伤害。使自身获得5点力量，抽2张牌
 
 
 [Pool(typeof(ColorlessCardPool))]
-public sealed class Chaos() : CustomCardModel(2, CardType.Attack, CardRarity.Common, TargetType.AllEnemies)
+public sealed class Horror() : CustomCardModel(0, CardType.Attack, CardRarity.Common, TargetType.AllEnemies)
 {
     protected override IEnumerable<IHoverTip> ExtraHoverTips => [
         HoverTipFactory.FromPower<StrengthPower>()
@@ -30,21 +30,19 @@ public sealed class Chaos() : CustomCardModel(2, CardType.Attack, CardRarity.Com
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
     ];
+    protected override bool HasEnergyCostX => true;
 
     public override string PortraitPath => $"{Id.Entry.RemovePrefix().ToLowerInvariant()}.png".CardImagePath();
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        var damageValue = (Owner.Creature.MaxHp - Owner.Creature.CurrentHp) * Owner.Creature.GetPowerAmount<StrengthPower>();
-        var allEnemies = CombatState.Enemies;
-        if (damageValue < 0 && allEnemies != null)
-        {
-            foreach (var enemy in allEnemies)
-            {
-                await CreatureCmd.Heal(enemy, damageValue);
-            }
-        }
-        await DamageCmd.Attack(damageValue).FromCard(this).TargetingAllOpponents(base.CombatState)
+        int num = ResolveEnergyXValue();
+        var lossHp = num * 4;
+        var damage = num * 14;
+
+        BombCarCardUtil.HpLoss(choiceContext, Owner, lossHp, this);
+
+        await DamageCmd.Attack(damage).FromCard(this).TargetingAllOpponents(base.CombatState)
             .WithHitFx("vfx/vfx_starry_impact")
             .SpawningHitVfxOnEachCreature()
             .Execute(choiceContext);
@@ -52,6 +50,6 @@ public sealed class Chaos() : CustomCardModel(2, CardType.Attack, CardRarity.Com
 
     protected override void OnUpgrade()
     {
-        EnergyCost.UpgradeBy(-1);
+        AddKeyword(CardKeyword.Retain);
     }
 }
