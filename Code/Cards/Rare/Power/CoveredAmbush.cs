@@ -11,41 +11,36 @@ using MegaCrit.Sts2.Core.ValueProps;
 using Test.Code.Extensions;
 using Test.Code.Powers;
 
-namespace Test.Code.Cards.Rare;
+namespace Test.Code.Cards.Rare.Power;
 
-  
 [Pool(typeof(SilentCardPool))]
-public sealed class DeliveringCharcoal() : CustomCardModel(1, CardType.Skill, CardRarity.Rare, TargetType.AnyAlly)
+public sealed class CoveredAmbush() : CustomCardModel(2, CardType.Power, CardRarity.Rare, TargetType.Self)
 {
     public override CardMultiplayerConstraint MultiplayerConstraint => CardMultiplayerConstraint.MultiplayerOnly;
+
     protected override IEnumerable<IHoverTip> ExtraHoverTips => [
-        base.EnergyHoverTip,
-        HoverTipFactory.FromPower<DeliveringCharcoalPower>()
+        HoverTipFactory.FromPower<CoveredAmbushPower>()
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new EnergyVar(2)
+        new DamageVar(7, ValueProp.Move)
     ];
 
     public override string PortraitPath => $"{Id.Entry.RemovePrefix().ToLowerInvariant()}.png".CardImagePath();
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        ArgumentNullException.ThrowIfNull(cardPlay.Target);
+        // ArgumentNullException.ThrowIfNull(cardPlay.Target);
         await CreatureCmd.TriggerAnim(base.Owner.Creature, "Cast", base.Owner.Character.CastAnimDelay);
 
         var owner = cardPlay.Card.Owner;
-        var allyC = cardPlay.Target;
-        var allyP = cardPlay.Target.Player;
 
-        await PlayerCmd.GainEnergy(DynamicVars.Energy.BaseValue, allyP);
-        await PowerCmd.Apply<DeliveringCharcoalPower>(allyC, 1, owner.Creature, this, false);
+        await PowerCmd.Apply<CoveredAmbushPower>(owner.Creature, DynamicVars.Damage.BaseValue, owner.Creature, this, false);
     }
 
     protected override void OnUpgrade()
     {
-        EnergyCost.UpgradeBy(-1);
-        DynamicVars.Energy.UpgradeValueBy(1m);
+        DynamicVars.Damage.UpgradeValueBy(4m);
     }
 }

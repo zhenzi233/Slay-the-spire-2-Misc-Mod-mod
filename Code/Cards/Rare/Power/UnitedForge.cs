@@ -14,7 +14,7 @@ using Test.Code.Cards.Extension;
 using Test.Code.Extensions;
 using Test.Code.Powers;
 
-namespace Test.Code.Cards.Rare;
+namespace Test.Code.Cards.Rare.Power;
 
 // 齐心锻造
 // 将三张锻造材料放入所有玩家的抽牌堆。

@@ -12,7 +12,7 @@ using MegaCrit.Sts2.Core.Models.CardPools;
 using Test.Code.Extensions;
 using Test.Code.Powers;
 
-namespace Test.Code.Cards.Rare;
+namespace Test.Code.Cards.Rare.Skill;
 
   
 [Pool(typeof(IroncladCardPool))]

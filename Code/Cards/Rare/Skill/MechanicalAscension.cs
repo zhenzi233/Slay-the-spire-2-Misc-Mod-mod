@@ -15,7 +15,7 @@ using Test.Code.Cards.Extension;
 using Test.Code.Extensions;
 using Test.Code.Powers;
 
-namespace Test.Code.Cards.Rare;
+namespace Test.Code.Cards.Rare.Skill;
 
 // 机械飞升
 // 激发另一名玩家的全部充能球。若没有，则令其充能球栏+2并往其充能球栏随机填满充能球。

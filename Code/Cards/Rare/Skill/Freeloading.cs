@@ -13,7 +13,7 @@ using MegaCrit.Sts2.Core.ValueProps;
 using Test.Code.Extensions;
 using Test.Code.Powers;
 
-namespace Test.Code.Cards.Rare;
+namespace Test.Code.Cards.Rare.Skill;
 
 // 白嫖
 // 使另一名玩家的牌堆顶中的一张随机的牌添加至你手牌中。

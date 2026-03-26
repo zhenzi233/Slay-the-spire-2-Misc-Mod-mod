@@ -15,7 +15,7 @@ using Test.Code.Cards.Extension;
 using Test.Code.Extensions;
 using Test.Code.Powers;
 
-namespace Test.Code.Cards.Rare;
+namespace Test.Code.Cards.Rare.Power;
 
 // 灵魂涌动
 // 在所有玩家的抽牌堆中加入2张灵魂。其他玩家消耗灵魂时，你召唤8/10

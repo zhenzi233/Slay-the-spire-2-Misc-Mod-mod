@@ -2,29 +2,36 @@ using BaseLib.Abstracts;
 using BaseLib.Extensions;
 using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Context;
 using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.CardPools;
+using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.ValueProps;
+using Test.Code.Cards.Extension;
 using Test.Code.Extensions;
 using Test.Code.Powers;
 
-namespace Test.Code.Cards.Rare;
+namespace Test.Code.Cards.Rare.Power;
 
-[Pool(typeof(SilentCardPool))]
-public sealed class CoveredAmbush() : CustomCardModel(2, CardType.Power, CardRarity.Rare, TargetType.Self)
+// 能量爆炸
+// 其他玩家每消耗一点能量，本回合就获得等量的集中。
+[Pool(typeof(DefectCardPool))]
+public sealed class EnergyExplose() : CustomCardModel(2, CardType.Power, CardRarity.Rare, TargetType.Self)
 {
     public override CardMultiplayerConstraint MultiplayerConstraint => CardMultiplayerConstraint.MultiplayerOnly;
-
     protected override IEnumerable<IHoverTip> ExtraHoverTips => [
-        HoverTipFactory.FromPower<CoveredAmbushPower>()
+        HoverTipFactory.FromPower<EnergyExplosePower>(),
+        HoverTipFactory.FromPower<EnergyExploseFocusPower>()
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DamageVar(7, ValueProp.Move)
+        new EnergyVar(1)
     ];
 
     public override string PortraitPath => $"{Id.Entry.RemovePrefix().ToLowerInvariant()}.png".CardImagePath();
@@ -34,13 +41,12 @@ public sealed class CoveredAmbush() : CustomCardModel(2, CardType.Power, CardRar
         // ArgumentNullException.ThrowIfNull(cardPlay.Target);
         await CreatureCmd.TriggerAnim(base.Owner.Creature, "Cast", base.Owner.Character.CastAnimDelay);
 
-        var owner = cardPlay.Card.Owner;
-
-        await PowerCmd.Apply<CoveredAmbushPower>(owner.Creature, DynamicVars.Damage.BaseValue, owner.Creature, this, false);
+        await PowerCmd.Apply<EnergyExplosePower>(base.Owner.Creature, 1, base.Owner.Creature, this);
     }
 
+    // 其他玩家每消耗一点能量，本回合就获得等量的集中。
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(4m);
+        EnergyCost.UpgradeBy(-1);
     }
 }

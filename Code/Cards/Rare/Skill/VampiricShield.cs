@@ -2,31 +2,21 @@ using BaseLib.Abstracts;
 using BaseLib.Extensions;
 using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Commands;
-using MegaCrit.Sts2.Core.Context;
 using MegaCrit.Sts2.Core.Entities.Cards;
-using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.CardPools;
-using MegaCrit.Sts2.Core.Models.Cards;
-using MegaCrit.Sts2.Core.ValueProps;
-using Test.Code.Cards.Extension;
 using Test.Code.Extensions;
-using Test.Code.Powers;
 
-namespace Test.Code.Cards.Rare;
+namespace Test.Code.Cards.Rare.Skill;
 
-// 骸骨精英
-// 消耗，另一名玩家召唤等同你血量一半的数值。
-[Pool(typeof(NecrobinderCardPool))]
-public sealed class BoneElite() : CustomCardModel(3, CardType.Skill, CardRarity.Rare, TargetType.AnyAlly)
+[Pool(typeof(IroncladCardPool))]
+public sealed class VampiricShield() : CustomCardModel(0, CardType.Skill, CardRarity.Rare, TargetType.AnyAlly)
 {
     public override CardMultiplayerConstraint MultiplayerConstraint => CardMultiplayerConstraint.MultiplayerOnly;
     protected override IEnumerable<IHoverTip> ExtraHoverTips => [
-        HoverTipFactory.Static(StaticHoverTip.SummonDynamic, base.DynamicVars.Summon)
     ];
-
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
     ];
@@ -43,16 +33,23 @@ public sealed class BoneElite() : CustomCardModel(3, CardType.Skill, CardRarity.
         await CreatureCmd.TriggerAnim(base.Owner.Creature, "Cast", base.Owner.Character.CastAnimDelay);
 
         var allyC = cardPlay.Target;
-        double cal = Owner.Creature.CurrentHp / 2;
-        decimal summonValue = (decimal)Math.Floor(cal);
+        var allyP = cardPlay.Target.Player;
+        var owner = cardPlay.Card.Owner;
 
-        await OstyCmd.Summon(choiceContext, allyC.Player, summonValue, this);
+        if (allyP == null)
+        {
+            return;
+        }
+
+        double allyBlock = allyC.Block;
+        decimal gainBlock = (decimal)Math.Floor(allyBlock / 2);
+
+        await CreatureCmd.LoseBlock(allyC, gainBlock);
+        await CreatureCmd.Heal(owner.Creature, gainBlock, true);
     }
 
-    // 另一名玩家召唤等同你血量一半的数值。
     protected override void OnUpgrade()
     {
-        EnergyCost.UpgradeBy(-1);
         RemoveKeyword(CardKeyword.Exhaust);
     }
 }

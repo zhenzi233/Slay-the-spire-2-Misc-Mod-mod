@@ -93,5 +93,8 @@
     "TEST-VITALITY.description": "一回合内损失的血量不会超过20",
     "TEST-VITALITY.title": "生息",
     "TEST-VIRTUE.description": "恢复{Heal:diff()}点生命。\n抽{Cards:diff()}张牌。",
-    "TEST-VIRTUE.title": "美德"
+    "TEST-VIRTUE.title": "美德",
+
+    "TEST-BOAST.description": "眩晕你的队友和所有敌人。",
+    "TEST-BOAST.title": "吹牛"
 }
