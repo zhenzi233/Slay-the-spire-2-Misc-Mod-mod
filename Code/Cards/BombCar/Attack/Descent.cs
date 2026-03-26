@@ -20,6 +20,7 @@ namespace Test.Code.Cards.BombCar.Attack;
 // 造成你已损失生命*X能量的伤害
 // 获得X点力量，造成你已损失生命*X能量的伤害
 
+
 [Pool(typeof(ColorlessCardPool))]
 public sealed class Descent() : CustomCardModel(0, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
 {

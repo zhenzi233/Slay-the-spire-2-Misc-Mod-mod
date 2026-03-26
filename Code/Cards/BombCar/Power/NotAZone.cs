@@ -11,6 +11,7 @@ using MegaCrit.Sts2.Core.Models.CardPools;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.ValueProps;
 using Test.Code.Extensions;
+using Test.Code.Powers;
 using Test.Code.Powers.BombCar;
 
 namespace Test.Code.Cards.BombCar.Skill;
@@ -37,7 +38,7 @@ public sealed class NotAZone() : CustomCardModel(3, CardType.Power, CardRarity.R
 	{
 		await CreatureCmd.TriggerAnim(base.Owner.Creature, "Cast", base.Owner.Character.CastAnimDelay);
 
-		await PowerCmd.Apply<DexterityPower>(Owner.Creature, DynamicVars["PlatingPower"].BaseValue, Owner.Creature, this);
+		await PowerCmd.Apply<NotAZonePower>(Owner.Creature, 1, Owner.Creature, this);
 	}
 
 	protected override void OnUpgrade()

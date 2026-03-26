@@ -24,7 +24,7 @@ public sealed class BoneElite() : CustomCardModel(3, CardType.Skill, CardRarity.
 {
     public override CardMultiplayerConstraint MultiplayerConstraint => CardMultiplayerConstraint.MultiplayerOnly;
     protected override IEnumerable<IHoverTip> ExtraHoverTips => [
-        HoverTipFactory.Static(StaticHoverTip.SummonDynamic, base.DynamicVars.Summon)
+        HoverTipFactory.Static(StaticHoverTip.SummonStatic, base.DynamicVars.Summon)
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>

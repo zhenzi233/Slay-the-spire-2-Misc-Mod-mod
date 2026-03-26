@@ -7,6 +7,7 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
+using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.CardPools;
 using MegaCrit.Sts2.Core.Models.Cards;
@@ -25,7 +26,6 @@ public sealed class Boast() : CustomCardModel(3, CardType.Skill, CardRarity.Rare
 {
     public override CardMultiplayerConstraint MultiplayerConstraint => CardMultiplayerConstraint.MultiplayerOnly;
     protected override IEnumerable<IHoverTip> ExtraHoverTips => [
-        HoverTipFactory.Static(StaticHoverTip.SummonDynamic, base.DynamicVars.Summon)
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
@@ -36,13 +36,21 @@ public sealed class Boast() : CustomCardModel(3, CardType.Skill, CardRarity.Rare
         CardKeyword.Exhaust
     ];
 
+    public List<LocString> talks = new List<LocString>()
+    {
+        new LocString("cards", "BOAST.talk"),
+        new LocString("cards", "BOAST.talk1"),
+        new LocString("cards", "BOAST.talk2"),
+        new LocString("cards", "BOAST.talk3")
+    };
+
     public override string PortraitPath => $"{Id.Entry.RemovePrefix().ToLowerInvariant()}.png".CardImagePath();
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await CreatureCmd.TriggerAnim(base.Owner.Creature, "Cast", base.Owner.Character.CastAnimDelay);
         var enemies = CombatState.Enemies;
-        var allies = CombatState.Allies;
+        var allies = CombatState.Players;
         foreach (var enemy in enemies)
         {
             await CreatureCmd.Stun(enemy);
@@ -50,9 +58,14 @@ public sealed class Boast() : CustomCardModel(3, CardType.Skill, CardRarity.Rare
 
         foreach (var ally in allies)
         {
-            PlayerCmd.EndTurn(ally.Player, false);
+            if (!ally.Creature.IsAlive) return;
+            if (ally == Owner) return;
+            PlayerCmd.EndTurn(ally, false);
+            // if (!(Owner.RunState.Rng.CombatTargets.NextInt(5) < 1)) return;
+            var talk = Owner.RunState.Rng.CombatTargets.NextItem(talks);
+            TalkCmd.Play(talk, ally.Creature);
         }
-        
+
     }
 
     // 另一名玩家召唤等同你血量一半的数值。

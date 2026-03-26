@@ -16,6 +16,7 @@ using Test.Code.Cards.Extension;
 using MegaCrit.Sts2.Core.Models.Cards;
 using MegaCrit.Sts2.Core.Models.Powers;
 using Test.Code.Cards.Rare;
+using Test.Code.Cards.Rare.Power;
 
 namespace Test.Code.Powers;
 
