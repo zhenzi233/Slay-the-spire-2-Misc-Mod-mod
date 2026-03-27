@@ -12,6 +12,7 @@ using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.ValueProps;
 using MegaCrit.Sts2.Core.Logging;
 using MegaCrit.Sts2.Core.Commands.Builders;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace Test.Code.Powers;
 
@@ -25,20 +26,21 @@ public sealed class CoveredAmbushPower : CustomPowerModel
     public override string CustomPackedIconPath => $"{Id.Entry.RemovePrefix().ToLowerInvariant()}.png".PowerImagePath();
     public override string CustomBigIconPath => CustomPackedIconPath;
 
-    public override async Task AfterBlockGained(
-        Creature creature, 
-        decimal amount, 
-        ValueProp props, 
-        CardModel? cardSource)
+    public override async Task AfterCardPlayed(PlayerChoiceContext context, CardPlay cardPlay)
     {
-        if (creature.IsPlayer && creature != Owner)
+        if (cardPlay.Card.Owner == Owner.Player) return;
+        if (cardPlay.Card != null && cardPlay.Card.DynamicVars != null)
         {
-            await DamageCmd.Attack(Amount)
-            .TargetingRandomOpponents(CombatState)
-            .WithHitCount(1)
-            .WithHitFx("vfx/vfx_attack_slash")
-            .Execute(new ThrowingPlayerChoiceContext());
-            Flash();
+            if (cardPlay.Card.DynamicVars.Block == null) return;
+            if (cardPlay.Card.DynamicVars.Block.BaseValue != 0)
+            {
+                await DamageCmd.Attack(Amount)
+                .TargetingRandomOpponents(CombatState)
+                .WithHitCount(1)
+                .WithHitFx("vfx/vfx_attack_slash")
+                .Execute(context);
+                Flash();
+            }
         }
     }
 }

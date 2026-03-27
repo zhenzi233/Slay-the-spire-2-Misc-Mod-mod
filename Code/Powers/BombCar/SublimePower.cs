@@ -34,7 +34,7 @@ public sealed class SublimePower : CustomPowerModel
     {
         if (player != Owner.Player) return;
         Flash();
-        BombCarCardUtil.HpLoss(choiceContext, player, Amount, null);
+        BombCarCardUtil.HpLoss(choiceContext, player, Amount);
         await CardPileCmd.Draw(choiceContext, 2 * Amount, player);
     }
 }

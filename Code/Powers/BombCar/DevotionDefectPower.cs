@@ -23,17 +23,17 @@ namespace Test.Code.Powers;
 
 public sealed class DevotionDefectPower : CustomPowerModel
 {
-    public override PowerType Type => PowerType.Buff;
+	public override PowerType Type => PowerType.Buff;
 
-    public override PowerStackType StackType => PowerStackType.Single;
-    public override string CustomPackedIconPath => $"{Id.Entry.RemovePrefix().ToLowerInvariant()}.png".PowerImagePath();
-    public override string CustomBigIconPath => CustomPackedIconPath;
-	protected override IEnumerable<DynamicVar> CanonicalVars => 
-    [
-        new StringVar("Applier")
-    ];
+	public override PowerStackType StackType => PowerStackType.Single;
+	public override string CustomPackedIconPath => $"{Id.Entry.RemovePrefix().ToLowerInvariant()}.png".PowerImagePath();
+	public override string CustomBigIconPath => CustomPackedIconPath;
+	protected override IEnumerable<DynamicVar> CanonicalVars =>
+	[
+		new StringVar("Applier")
+	];
 
-    public override async Task AfterApplied(Creature? applier, CardModel? cardSource)
+	public override async Task AfterApplied(Creature? applier, CardModel? cardSource)
 	{
 		((StringVar)base.DynamicVars["Applier"]).StringValue = PlatformUtil.GetPlayerName(RunManager.Instance.NetService.Platform, base.Applier.Player.NetId);
 		DevotionAttackPower devotionAttackPower = Applier.GetPower<DevotionAttackPower>();
@@ -51,18 +51,26 @@ public sealed class DevotionDefectPower : CustomPowerModel
 			await PowerCmd.Remove(this);
 		}
 	}
-    
-    public override decimal ModifyDamageMultiplicative(Creature? target, decimal amount, ValueProp props, Creature? dealer, CardModel? cardSource)
+
+	public override decimal ModifyDamageMultiplicative(Creature? target, decimal amount, ValueProp props, Creature? dealer, CardModel? cardSource)
 	{
-        if (target != Owner)
-        {
-            return 1m;
-        }
-        if (!props.IsPoweredAttack_())
-        {
-            return 1m;
-        }
-        return 0m;
+		if (target != Owner)
+		{
+			return 1m;
+		}
+		if (!props.IsPoweredAttack_())
+		{
+			return 1m;
+		}
+		return 0m;
+	}
+
+	public override async Task AfterTurnEndLate(PlayerChoiceContext choiceContext, CombatSide side)
+	{
+		if (side != base.Owner.Side)
+		{
+			await PowerCmd.Remove(this);
+		}
 	}
 
 

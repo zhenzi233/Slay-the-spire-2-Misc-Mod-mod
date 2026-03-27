@@ -20,19 +20,26 @@ namespace Test.Code.Powers;
 
 public sealed class DeliveringCharcoalPower : CustomPowerModel
 {
-    public override PowerType Type => PowerType.Buff;
+	public override PowerType Type => PowerType.Buff;
 
-    public override PowerStackType StackType => PowerStackType.Counter;
-    public override string CustomPackedIconPath => $"{Id.Entry.RemovePrefix().ToLowerInvariant()}.png".PowerImagePath();
-    public override string CustomBigIconPath => CustomPackedIconPath;
+	public override PowerStackType StackType => PowerStackType.Counter;
+	public override string CustomPackedIconPath => $"{Id.Entry.RemovePrefix().ToLowerInvariant()}.png".PowerImagePath();
+	public override string CustomBigIconPath => CustomPackedIconPath;
 
-    public override decimal ModifyDamageMultiplicative(Creature? target, decimal amount, ValueProp props, Creature? dealer, CardModel? cardSource)
+	public override decimal ModifyDamageMultiplicative(Creature? target, decimal amount, ValueProp props, Creature? dealer, CardModel? cardSource)
 	{
-        Flash();
-		return 2m;
+		if (dealer != null && dealer.IsEnemy)
+		{
+			if (target == Owner)
+			{
+				// Flash();
+				return 2m;
+			}
+		}
+		return 1m;
 	}
 
-    public override async Task AfterTurnEnd(PlayerChoiceContext choiceContext, CombatSide side)
+	public override async Task AfterTurnEnd(PlayerChoiceContext choiceContext, CombatSide side)
 	{
 		if (side != base.Owner.Side)
 		{
