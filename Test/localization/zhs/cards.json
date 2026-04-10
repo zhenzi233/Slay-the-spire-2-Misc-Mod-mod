@@ -7,7 +7,7 @@
     "TEST-VAMPIRIC_SHIELD.title": "吸血护盾",
     "TEST-THIS_IS_THE_ONE.description": "另一名玩家承受双倍来自敌人的伤害。\n敌人的伤害对你和其他盟友减半",
     "TEST-THIS_IS_THE_ONE.title": "就是这位！",
-    "TEST-COVERED_AMBUSH.description": "每当其他玩家获得[gold]格挡[/gold]时，你随机给一名敌人造成{Damage:diff()}点伤害。",
+    "TEST-COVERED_AMBUSH.description": "其他玩家从有具体数值的[gold]格挡[/gold]的卡牌获得[gold]格挡[/gold]时，你随机给一名敌人造成{Damage:diff()}点伤害。",
     "TEST-COVERED_AMBUSH.title": "掩护偷袭",
     "TEST-DELIVERING_CHARCOAL.description": "另一名玩家获得{Energy:energyIcons()}。\n其在本回合受到敌人的伤害翻倍。",
     "TEST-DELIVERING_CHARCOAL.title": "送炭",

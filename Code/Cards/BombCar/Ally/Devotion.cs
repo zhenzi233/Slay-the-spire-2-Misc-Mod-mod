@@ -25,32 +25,35 @@ namespace Test.Code.Cards.BombCar.Ally;
 public sealed class Devotion() : CustomCardModel(0, CardType.Skill, CardRarity.Common, TargetType.Self)
 {
     public override CardMultiplayerConstraint MultiplayerConstraint => CardMultiplayerConstraint.MultiplayerOnly;
-	protected override IEnumerable<IHoverTip> ExtraHoverTips => [
+    protected override IEnumerable<IHoverTip> ExtraHoverTips => [
     ];
-    
-	protected override IEnumerable<DynamicVar> CanonicalVars =>
+
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
     ];
 
-	public override string PortraitPath => $"{Id.Entry.RemovePrefix().ToLowerInvariant()}.png".CardImagePath();
+    public override string PortraitPath => $"{Id.Entry.RemovePrefix().ToLowerInvariant()}.png".CardImagePath();
 
-	protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
-	{
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+    {
         await CreatureCmd.TriggerAnim(base.Owner.Creature, "Cast", base.Owner.Character.CastAnimDelay);
 
         var allys = CombatState.Allies;
         foreach (Creature ally in allys)
         {
-            await PowerCmd.Apply<DevotionDefectPower>(ally, 1, Owner.Creature, this);
+            if (ally != Owner.Creature)
+            {
+                await PowerCmd.Apply<DevotionDefectPower>(ally, 1, Owner.Creature, this);
+            }
         }
 
         if (IsUpgraded)
         {
             await PowerCmd.Apply<BarricadePower>(Owner.Creature, 1, Owner.Creature, this);
         }
-	}
+    }
 
-	protected override void OnUpgrade()
-	{
-	}
+    protected override void OnUpgrade()
+    {
+    }
 }

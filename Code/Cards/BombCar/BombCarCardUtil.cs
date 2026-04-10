@@ -29,4 +29,10 @@ public static class BombCarCardUtil
     {
         await CreatureCmd.Damage(choiceContext, owner.Creature, num, ValueProp.Unblockable | ValueProp.Unpowered | ValueProp.Move, card);
     }
+
+    public static async void HpLoss(PlayerChoiceContext choiceContext, Player owner, decimal num)
+    {
+        await CreatureCmd.Damage(choiceContext, owner.Creature, amount:num, ValueProp.Unblockable | ValueProp.Unpowered | ValueProp.Move, dealer:null, null);
+    }
+
 }

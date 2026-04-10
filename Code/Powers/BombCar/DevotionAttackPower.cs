@@ -23,23 +23,23 @@ namespace Test.Code.Powers;
 
 public sealed class DevotionAttackPower : CustomPowerModel
 {
-    public override PowerType Type => PowerType.Buff;
+	public override PowerType Type => PowerType.Buff;
 
-    public override PowerStackType StackType => PowerStackType.Single;
-    public override string CustomPackedIconPath => $"{Id.Entry.RemovePrefix().ToLowerInvariant()}.png".PowerImagePath();
-    public override string CustomBigIconPath => CustomPackedIconPath;
+	public override PowerStackType StackType => PowerStackType.Single;
+	public override string CustomPackedIconPath => $"{Id.Entry.RemovePrefix().ToLowerInvariant()}.png".PowerImagePath();
+	public override string CustomBigIconPath => CustomPackedIconPath;
 
-    private class Data
+	private class Data
 	{
 		public readonly List<Creature> coveredCreatures = new List<Creature>();
 	}
 
 	private const string _coveringKey = "Covering";
 
-	protected override IEnumerable<DynamicVar> CanonicalVars => 
-    [
-        new StringVar("Covering")
-    ];
+	protected override IEnumerable<DynamicVar> CanonicalVars =>
+	[
+		new StringVar("Covering")
+	];
 
 	protected override object InitInternalData()
 	{
@@ -80,5 +80,13 @@ public sealed class DevotionAttackPower : CustomPowerModel
 			return 1m;
 		}
 		return GetInternalData<Data>().coveredCreatures.Count + 1;
+	}
+
+	public override async Task AfterTurnEndLate(PlayerChoiceContext choiceContext, CombatSide side)
+	{
+		if (side != base.Owner.Side)
+		{
+			await PowerCmd.Remove(this);
+		}
 	}
 }

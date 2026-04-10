@@ -24,10 +24,13 @@ public sealed class ThisIsTheOnePowerB : CustomPowerModel
 
 	public override decimal ModifyDamageMultiplicative(Creature? target, decimal amount, ValueProp props, Creature? dealer, CardModel? cardSource)
 	{
-		if (target == Owner && !props.IsPoweredAttack_())
+		if (dealer != null && dealer.IsEnemy)
 		{
-			Flash();
-			return 2m;
+			if (target == Owner)
+			{
+				// Flash();
+				return 2m;
+			}
 		}
 		return 1m;
 	}
