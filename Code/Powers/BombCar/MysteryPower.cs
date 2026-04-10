@@ -33,7 +33,7 @@ public sealed class MysteryPower : CustomPowerModel
         if (side == base.Owner.Side && Owner.IsPlayer)
         {
             Flash();
-            await PlayerCmd.GainEnergy(2, Owner.Player);
+            await PlayerCmd.GainEnergy(2 * Amount, Owner.Player);
             await PowerCmd.Apply<DoomPower>(base.Owner, base.Amount * 3, base.Owner, null);
         }
     }

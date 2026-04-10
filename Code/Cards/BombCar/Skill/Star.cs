@@ -44,7 +44,8 @@ public sealed class Star() : CustomCardModel(1, CardType.Skill, CardRarity.Rare,
 	{
         await CreatureCmd.TriggerAnim(base.Owner.Creature, "Cast", base.Owner.Character.CastAnimDelay);
         
-        await PowerCmd.Apply<StrengthPower>(Owner.Creature, DynamicVars.Strength.BaseValue, Owner.Creature, this);
+        await PowerCmd.Apply<StarPower>(Owner.Creature, DynamicVars.Doom.BaseValue, Owner.Creature, this);
+        // 233
 	}
 
 	protected override void OnUpgrade()
