@@ -31,7 +31,7 @@ public sealed class SavageFeast() : CustomCardModel(1, CardType.Skill, CardRarit
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DynamicVar("Multi", 3m)
+        new DynamicVar("Multi", 5m)
     ];
 
     public override string PortraitPath => StringExtensions.WrigglerCard();
@@ -59,7 +59,7 @@ public sealed class SavageFeast() : CustomCardModel(1, CardType.Skill, CardRarit
             cardCost = exhaustedCard.EnergyCost.Canonical;
         }
 
-        var healValue = cardCost * 3;
+        var healValue = cardCost * 5;
 
         await CardCmd.Exhaust(choiceContext, exhaustedCard);
 

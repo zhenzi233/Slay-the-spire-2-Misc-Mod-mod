@@ -30,8 +30,8 @@ public sealed class Infect() : CustomCardModel(1, CardType.Attack, CardRarity.Co
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DamageVar(5, ValueProp.Move),
-        new PowerVar<PoisonPower>(3m)
+        new DamageVar(10, ValueProp.Move),
+        new PowerVar<PoisonPower>(5m)
     ];
 
     public override string PortraitPath => StringExtensions.WrigglerCard();
@@ -43,8 +43,8 @@ public sealed class Infect() : CustomCardModel(1, CardType.Attack, CardRarity.Co
         var owner = cardPlay.Card.Owner;
         var combatState = cardPlay.Card.CombatState;
         var attackResult = await DamageCmd.Attack(base.DynamicVars.Damage.BaseValue).FromCard(this).TargetingAllOpponents(base.CombatState)
-			.WithHitFx("vfx/vfx_attack_blunt", null, "heavy_attack.mp3")
-			.Execute(choiceContext);
+            .WithHitFx("vfx/vfx_attack_blunt", null, "heavy_attack.mp3")
+            .Execute(choiceContext);
 
         foreach (var result in attackResult.Results)
         {
@@ -55,9 +55,9 @@ public sealed class Infect() : CustomCardModel(1, CardType.Attack, CardRarity.Co
         }
     }
 
-// 将三张锻造材料+放入所有玩家的抽牌堆。
+    // 将三张锻造材料+放入所有玩家的抽牌堆。
     protected override void OnUpgrade()
     {
-        DynamicVars["PoisonPower"].UpgradeValueBy(2m);
+        DynamicVars["PoisonPower"].UpgradeValueBy(5m);
     }
 }

@@ -29,7 +29,7 @@ public sealed class Gnaw() : CustomCardModel(1, CardType.Attack, CardRarity.Comm
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DamageVar(3, ValueProp.Move),
+        new DamageVar(6, ValueProp.Move),
         new DynamicVar("Heal", 3)
     ];
 
@@ -54,6 +54,6 @@ public sealed class Gnaw() : CustomCardModel(1, CardType.Attack, CardRarity.Comm
     protected override void OnUpgrade()
     {
         DynamicVars["Heal"].UpgradeValueBy(2m);
-        DynamicVars.Damage.UpgradeValueBy(2m);
+        DynamicVars.Damage.UpgradeValueBy(3m);
     }
 }

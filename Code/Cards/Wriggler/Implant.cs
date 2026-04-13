@@ -33,8 +33,8 @@ public sealed class Implant() : CustomCardModel(1, CardType.Skill, CardRarity.Co
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new EnergyVar(1),
-        new DynamicVar("Card", 1)
+        new EnergyVar(2),
+        new CardsVar(1)
     ];
 
     public override HashSet<CardKeyword> CanonicalKeywords =>
@@ -51,7 +51,7 @@ public sealed class Implant() : CustomCardModel(1, CardType.Skill, CardRarity.Co
         var allyP = cardPlay.Target.Player;
 
         await PlayerCmd.GainEnergy(DynamicVars.Energy.BaseValue, allyP);
-        
+
         IReadOnlyList<CardModel> cards = base.Owner.PlayerCombatState.Hand.Cards;
         var canUpgradeCards = new List<CardModel>();
         foreach (CardModel card in cards)
@@ -69,17 +69,18 @@ public sealed class Implant() : CustomCardModel(1, CardType.Skill, CardRarity.Co
         IEnumerable<CardModel> enumerable = canUpgradeCards.ToList().UnstableShuffle(base.Owner.RunState.Rng.CombatCardSelection).Take(1);
 
         foreach (CardModel card in enumerable)
-		{
-			if (card.IsUpgradable)
-			{
-				CardCmd.Upgrade(card);
-			}
-		}
+        {
+            if (card.IsUpgradable)
+            {
+                CardCmd.Upgrade(card);
+            }
+        }
     }
 
-// 将三张锻造材料+放入所有玩家的抽牌堆。
+    // 将三张锻造材料+放入所有玩家的抽牌堆。
     protected override void OnUpgrade()
     {
         DynamicVars.Energy.UpgradeValueBy(1m);
+        DynamicVars.Cards.UpgradeValueBy(1m);
     }
 }

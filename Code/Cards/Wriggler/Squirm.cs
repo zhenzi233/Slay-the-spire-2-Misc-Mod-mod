@@ -48,6 +48,7 @@ public sealed class Squirm() : CustomCardModel(1, CardType.Skill, CardRarity.Com
         var allyP = cardPlay.Target.Player;
 
         await CreatureCmd.GainBlock(base.Owner.Creature, new BlockVar(cardPlay.Target.CurrentHp, ValueProp.Move), cardPlay, false);
+        await CreatureCmd.GainBlock(cardPlay.Target, new BlockVar(cardPlay.Target.CurrentHp, ValueProp.Move), cardPlay, false);
 
         PlayerCmd.EndTurn(base.Owner, false);
     }
